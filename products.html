@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Produits · Commerce Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <link rel="stylesheet" href="premium.css" />
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">C</div>
+      <div>
+        <div class="sidebar-title">Commerce</div>
+        <div class="sidebar-subtitle">Admin</div>
+      </div>
+    </div>
+    <nav class="nav">
+      <div class="nav-section">
+        <div class="nav-label">Produits</div>
+        <a href="products.html" class="nav-item active"><span class="material-symbols-outlined icon">inventory_2</span> Liste des produits</a>
+        <a href="add-product.html" class="nav-item"><span class="material-symbols-outlined icon">add_circle</span> Ajouter un produit</a>
+        <a href="categories.html" class="nav-item"><span class="material-symbols-outlined icon">category</span> Catégories</a>
+        <a href="brands.html" class="nav-item"><span class="material-symbols-outlined icon">verified</span> Marques</a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">Commandes</div>
+        <a href="orders.html" class="nav-item"><span class="material-symbols-outlined icon">receipt_long</span> Toutes les commandes</a>
+        <a href="verification.html" class="nav-item"><span class="material-symbols-outlined icon">credit_score</span> Vérification paiements</a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">Paramètres</div>
+        <a href="settings.html" class="nav-item"><span class="material-symbols-outlined icon">storefront</span> Paramètres boutique</a>
+        <a href="users.html" class="nav-item"><span class="material-symbols-outlined icon">manage_accounts</span>Compte admin</a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <header class="header">
+      <div class="dropdown" id="storeDropdown">
+        <div class="store-switcher" onclick="toggleDropdown()">
+          <span class="w-2 h-2 rounded-full" style="background:#008060;width:8px;height:8px;border-radius:50%;display:inline-block;"></span>
+          <span id="storeName">Marketplace Agricole</span>
+          <span class="material-symbols-outlined" style="font-size:16px;color:#6d7175;">unfold_more</span>
+        </div>
+        <div class="dropdown-menu">
+          <div class="dropdown-item active" onclick="switchStore('agri')">Marketplace Agricole</div>
+          <div class="dropdown-item" onclick="switchStore('adult')">Marketplace Produits Adultes</div>
+        </div>
+      </div>
+      <div class="header-right">
+        <div style="position:relative;">
+          <span class="material-symbols-outlined" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);font-size:16px;color:#8c9196;">search</span>
+          <input class="search" placeholder="Rechercher..." />
+        </div>
+        <button class="btn" onclick="logout()">Déconnexion</button>
+      </div>
+    </header>
+
+    <div class="content">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Produits</h1>
+          <div class="page-subtitle" id="productCount">0 références</div>
+        </div>
+        <div class="flex gap-2">
+          <button class="btn">Exporter</button>
+          <button class="btn">Importer</button>
+          <a href="add-product.html" class="btn btn-primary">Ajouter un produit</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;gap:12px;align-items:center;">
+          <input id="searchInput" class="input" style="max-width:280px;height:32px;" placeholder="Filtrer les produits, SKU..." />
+          <select id="statusFilter" class="input" style="width:160px;height:32px;">
+            <option value="all">Tous les statuts</option>
+            <option value="published">Publié</option>
+            <option value="draft">Brouillon</option>
+          </select>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:40px;"><input type="checkbox" /></th>
+                <th style="width:56px;"></th>
+                <th>Produit</th>
+                <th>Catégorie</th>
+                <th style="text-align:right;">Prix</th>
+                <th>Stock</th>
+                <th>Statut</th>
+                <th style="width:80px;"></th>
+              </tr>
+            </thead>
+            <tbody id="productsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    requireAuth();
+
+    function toggleDropdown() {
+      document.getElementById('storeDropdown').classList.toggle('open');
+    }
+    function switchStore(store) {
+      setCurrentStore(store);
+    }
+
+    function renderProducts() {
+      const store = getCurrentStore();
+      document.getElementById('storeName').textContent = STORES[store].name;
+      let products = getProducts(store);
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const status = document.getElementById('statusFilter').value;
+      if (search) products = products.filter(p => p.name.toLowerCase().includes(search) || p.id.toLowerCase().includes(search));
+      if (status !== 'all') products = products.filter(p => p.status === status);
+
+      document.getElementById('productCount').textContent = products.length + ' références';
+      document.getElementById('productsTableBody').innerHTML = products.map(p => `
+        <tr>
+          <td><input type="checkbox" /></td>
+          <td>
+            <div style="width:40px;height:40px;border-radius:6px;overflow:hidden;background:#f1f2f3;">
+              <img src="${p.image || 'https://via.placeholder.com/40'}" style="width:100%;height:100%;object-fit:cover;" />
+            </div>
+          </td>
+          <td>
+            <div style="font-weight:500;">${p.name}</div>
+            <div class="text-secondary" style="font-size:12px;">${p.id}</div>
+          </td>
+          <td>${p.category}</td>
+          <td style="text-align:right;font-variant-numeric:tabular-nums;">
+            <div style="font-weight:500;">${p.price.toFixed(2).replace('.', ',')} €</div>
+            <div class="text-secondary" style="font-size:12px;">${p.priceHT.toFixed(2).replace('.', ',')} € HT</div>
+          </td>
+          <td>
+            <span class="badge ${p.stock > 3 ? 'badge-success' : p.stock > 0 ? 'badge-warning' : 'badge-neutral'}">
+              ${p.stock > 0 ? p.stock + ' en stock' : 'Épuisé'}
+            </span>
+          </td>
+          <td>
+            <span class="badge ${p.status === 'published' ? 'badge-success' : 'badge-neutral'}">
+              ${p.status === 'published' ? 'Publié' : 'Brouillon'}
+            </span>
+          </td>
+          <td style="text-align:right;">
+            <button class="btn" style="height:28px;padding:0 8px;">Modifier</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    document.getElementById('searchInput').addEventListener('input', renderProducts);
+    document.getElementById('statusFilter').addEventListener('change', renderProducts);
+    document.addEventListener('click', e => {
+      if (!e.target.closest('#storeDropdown')) document.getElementById('storeDropdown').classList.remove('open');
+    });
+    renderProducts();
+  </script>
+</body>
+</html>

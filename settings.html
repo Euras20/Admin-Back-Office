@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>Paramètres boutique · Commerce Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <link rel="stylesheet" href="premium.css" />
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">C</div>
+      <div>
+        <div class="sidebar-title">Commerce</div>
+        <div class="sidebar-subtitle">Admin</div>
+      </div>
+    </div>
+    <nav class="nav">
+      <div class="nav-section">
+        <div class="nav-label">Produits</div>
+        <a href="products.html" class="nav-item"><span class="material-symbols-outlined icon">inventory_2</span> Liste des produits</a>
+        <a href="add-product.html" class="nav-item"><span class="material-symbols-outlined icon">add_circle</span> Ajouter un produit</a>
+        <a href="categories.html" class="nav-item"><span class="material-symbols-outlined icon">category</span> Catégories</a>
+        <a href="brands.html" class="nav-item"><span class="material-symbols-outlined icon">verified</span> Marques</a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">Commandes</div>
+        <a href="orders.html" class="nav-item"><span class="material-symbols-outlined icon">receipt_long</span> Toutes les commandes</a>
+        <a href="verification.html" class="nav-item"><span class="material-symbols-outlined icon">credit_score</span> Vérification paiements</a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">Paramètres</div>
+        <a href="settings.html" class="nav-item active"><span class="material-symbols-outlined icon">storefront</span> Paramètres boutique</a>
+        <a href="general-settings.html" class="nav-item"><span class="material-symbols-outlined icon">settings</span> Paramètres généraux</a>
+        <a href="users.html" class="nav-item"><span class="material-symbols-outlined icon">manage_accounts</span> Compte admin</a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <header class="header">
+      <div id="storeName" style="font-weight:500;">Marketplace Agricole</div>
+      <button class="btn" onclick="logout()">Déconnexion</button>
+    </header>
+
+    <div class="content" style="max-width:860px;">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Paramètres de la boutique</h1>
+          <div class="page-subtitle" id="storeHint">Configuration de la boutique active</div>
+        </div>
+      </div>
+
+      <div class="card" style="padding:20px;margin-bottom:16px;">
+        <div style="font-weight:600;margin-bottom:16px;">Identité</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div>
+            <label>Nom commercial</label>
+            <input class="input" id="storeNameInput" value="Marketplace Agricole" />
+          </div>
+          <div>
+            <label>Email de contact</label>
+            <input class="input" type="email" id="emailInput" value="contact@agri-marketplace.fr" />
+          </div>
+          <div>
+            <label>Téléphone</label>
+            <input class="input" id="phoneInput" value="+33 2 40 89 22 10" />
+          </div>
+          <div>
+            <label>SIRET</label>
+            <input class="input" id="siretInput" value="849 201 992 00018" />
+          </div>
+        </div>
+        <div style="margin-top:16px;">
+          <label>Adresse</label>
+          <input class="input" id="addressInput" value="Agropole Ouest - Rue des Moissons, 44000 Nantes" />
+        </div>
+      </div>
+
+      <div class="card" style="padding:20px;margin-bottom:16px;">
+        <div style="font-weight:600;margin-bottom:16px;">Paiements SEPA</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border);">
+          <div>
+            <div style="font-weight:500;">Virement bancaire SEPA</div>
+            <div class="text-secondary" style="font-size:13px;">Les commandes restent en attente jusqu'à validation manuelle</div>
+          </div>
+          <span class="badge badge-success">Actif</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;">
+          <div>
+            <label>Titulaire</label>
+            <input class="input" value="SAS AGRI-MARKET COMMERCE" />
+          </div>
+          <div>
+            <label>Banque</label>
+            <input class="input" value="Crédit Agricole" />
+          </div>
+          <div style="grid-column:1/-1;">
+            <label>IBAN</label>
+            <input class="input" value="FR76 1450 6000 3982 9102 4456 123" style="font-family:monospace;" />
+          </div>
+          <div>
+            <label>BIC</label>
+            <input class="input" value="AGRIFRPP840" />
+          </div>
+          <div>
+            <label>Référence exigée</label>
+            <input class="input" value="AGRI-[ORDER_ID]" readonly style="background:#fafbfb;" />
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="padding:20px;margin-bottom:16px;">
+        <div style="font-weight:600;margin-bottom:16px;">Livraison</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div>
+            <label>Seuil de gratuité (€ HT)</label>
+            <input class="input" type="number" value="1500" />
+          </div>
+          <div>
+            <label>Forfait de base (€)</label>
+            <input class="input" type="number" step="0.01" value="45" />
+          </div>
+        </div>
+      </div>
+
+      <div class="flex gap-2">
+        <button class="btn" onclick="location.reload()">Annuler</button>
+        <button class="btn btn-primary" onclick="saveSettings()">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    requireAuth();
+    function load() {
+      const store = getCurrentStore();
+      document.getElementById('storeName').textContent = STORES[store].name;
+      document.getElementById('storeHint').textContent = 'Configuration de ' + STORES[store].name;
+      document.getElementById('storeNameInput').value = STORES[store].name;
+    }
+    function saveSettings() {
+      alert('Paramètres enregistrés');
+    }
+    load();
+  </script>
+</body>
+</html>

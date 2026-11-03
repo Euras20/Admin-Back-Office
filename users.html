@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>Compte admin · Commerce Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <link rel="stylesheet" href="premium.css" />
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">C</div>
+      <div>
+        <div class="sidebar-title">Commerce</div>
+        <div class="sidebar-subtitle">Admin</div>
+      </div>
+    </div>
+    <nav class="nav">
+      <div class="nav-section">
+        <div class="nav-label">Produits</div>
+        <a href="products.html" class="nav-item"><span class="material-symbols-outlined icon">inventory_2</span> Liste des produits</a>
+        <a href="add-product.html" class="nav-item"><span class="material-symbols-outlined icon">add_circle</span> Ajouter un produit</a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">Commandes</div>
+        <a href="orders.html" class="nav-item"><span class="material-symbols-outlined icon">receipt_long</span> Toutes les commandes</a>
+        <a href="verification.html" class="nav-item"><span class="material-symbols-outlined icon">credit_score</span> Vérification paiements</a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">Paramètres</div>
+        <a href="settings.html" class="nav-item"><span class="material-symbols-outlined icon">storefront</span> Paramètres boutique</a>
+        <a href="general-settings.html" class="nav-item"><span class="material-symbols-outlined icon">settings</span> Paramètres généraux</a>
+        <a href="users.html" class="nav-item active"><span class="material-symbols-outlined icon">manage_accounts</span> Compte admin</a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <header class="header">
+      <div style="font-weight:500;">Compte administrateur</div>
+      <button class="btn" onclick="logout()">Déconnexion</button>
+    </header>
+
+    <div class="content" style="max-width:560px;">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Compte admin</h1>
+          <div class="page-subtitle">Un seul administrateur. Modifiez vos identifiants de connexion.</div>
+        </div>
+      </div>
+
+      <div class="card" style="padding:24px;">
+        <form id="credentialsForm">
+          <div class="mb-4">
+            <label>Nom d'utilisateur</label>
+            <input class="input" id="username" />
+          </div>
+          <div class="mb-4">
+            <label>Nouveau mot de passe</label>
+            <input class="input" type="password" id="newPassword" placeholder="Laisser vide pour ne pas changer" />
+          </div>
+          <div class="mb-4">
+            <label>Confirmer le mot de passe</label>
+            <input class="input" type="password" id="confirmPassword" placeholder="Confirmer le nouveau mot de passe" />
+          </div>
+          <div style="display:flex;gap:8px;margin-top:20px;">
+            <button type="button" class="btn" onclick="loadCredentials()">Annuler</button>
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card" style="padding:16px;margin-top:16px;background:#fafbfb;">
+        <div style="font-size:13px;color:var(--text-secondary);">
+          Après modification, vous devrez vous reconnecter avec les nouveaux identifiants.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    requireAuth();
+
+    function loadCredentials() {
+      document.getElementById('username').value = localStorage.getItem('admin_username') || 'admin';
+      document.getElementById('newPassword').value = '';
+      document.getElementById('confirmPassword').value = '';
+    }
+
+    document.getElementById('credentialsForm').onsubmit = function(e) {
+      e.preventDefault();
+      const username = document.getElementById('username').value.trim();
+      const newPass = document.getElementById('newPassword').value;
+      const confirm = document.getElementById('confirmPassword').value;
+
+      if (!username) {
+        alert('Le nom d\'utilisateur est obligatoire');
+        return;
+      }
+      if (newPass && newPass !== confirm) {
+        alert('Les mots de passe ne correspondent pas');
+        return;
+      }
+
+      updateCredentials(username, newPass || null);
+      alert('Identifiants mis à jour. Vous allez être déconnecté.');
+      logout();
+    };
+
+    loadCredentials();
+  </script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vérification · Commerce Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <link rel="stylesheet" href="premium.css" />
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">C</div>
+      <div>
+        <div class="sidebar-title">Commerce</div>
+        <div class="sidebar-subtitle">Admin</div>
+      </div>
+    </div>
+    <nav class="nav">
+      <div class="nav-section">
+        <div class="nav-label">Produits</div>
+        <a href="products.html" class="nav-item"><span class="material-symbols-outlined icon">inventory_2</span> Liste des produits</a>
+        <a href="add-product.html" class="nav-item"><span class="material-symbols-outlined icon">add_circle</span> Ajouter un produit</a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">Commandes</div>
+        <a href="orders.html" class="nav-item"><span class="material-symbols-outlined icon">receipt_long</span> Toutes les commandes</a>
+        <a href="verification.html" class="nav-item active"><span class="material-symbols-outlined icon">credit_score</span> Vérification paiements</a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">Paramètres</div>
+        <a href="settings.html" class="nav-item"><span class="material-symbols-outlined icon">storefront</span> Paramètres boutique</a>
+        <a href="users.html" class="nav-item"><span class="material-symbols-outlined icon">manage_accounts</span> Utilisateurs</a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <header class="header">
+      <div class="store-switcher" id="storeName">Marketplace Agricole</div>
+      <div class="header-right">
+        <a href="orders.html" class="btn">← Retour aux commandes</a>
+        <button class="btn" onclick="logout()">Déconnexion</button>
+      </div>
+    </header>
+
+    <div class="content">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Vérification du paiement</h1>
+          <div class="page-subtitle" id="orderSubtitle">Chargement...</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:20px;">
+        <!-- Receipt -->
+        <div class="card" style="padding:20px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+            <div style="font-weight:500;">Preuve de paiement</div>
+            <span class="badge badge-neutral">SEPA</span>
+          </div>
+          <div style="background:#fafbfb;border:1px solid var(--border);border-radius:8px;padding:24px;min-height:320px;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:20px;">
+              <div>
+                <div style="font-weight:600;font-size:16px;">CRÉDIT AGRICOLE</div>
+                <div class="text-secondary" style="font-size:12px;">Avis d'exécution de virement SEPA</div>
+              </div>
+              <div class="text-secondary" style="font-size:12px;">RÉF. BNK-7718942</div>
+            </div>
+            <div style="background:white;border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:16px;display:flex;justify-content:space-between;">
+              <div>
+                <div class="text-secondary" style="font-size:12px;">Montant viré</div>
+                <div style="font-size:28px;font-weight:600;" id="receiptAmount">—</div>
+              </div>
+              <div style="text-align:right;">
+                <div class="text-secondary" style="font-size:12px;">Exécution</div>
+                <div style="font-weight:500;" id="receiptDate">—</div>
+              </div>
+            </div>
+            <div style="font-size:13.5px;line-height:1.8;">
+              <div style="display:flex;justify-content:space-between;"><span class="text-secondary">Émetteur</span><span id="receiptEmitter">—</span></div>
+              <div style="display:flex;justify-content:space-between;"><span class="text-secondary">Bénéficiaire</span><span>MARKETPLACE AGRICOLE SAS</span></div>
+              <div style="display:flex;justify-content:space-between;background:#f1f8f5;padding:8px 12px;border-radius:6px;margin-top:8px;">
+                <span class="text-secondary">Motif</span>
+                <span style="font-weight:600;color:#008060;" id="receiptRef">—</span>
+              </div>
+            </div>
+          </div>
+          <div class="text-secondary" style="font-size:12px;margin-top:12px;" id="fileInfo">recu_virement.png · Déposé le 14/10/2024</div>
+        </div>
+
+        <!-- Actions -->
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div class="card" style="padding:16px;">
+            <div style="font-weight:500;margin-bottom:12px;">Rapprochement</div>
+            <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);">
+              <span class="text-secondary">Montant attendu</span>
+              <span style="font-weight:500;" id="expectedAmount">—</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);">
+              <span class="text-secondary">Montant reçu</span>
+              <span style="font-weight:500;" id="receivedAmount">—</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:10px 0;align-items:center;">
+              <span class="text-secondary">Référence</span>
+              <span class="badge badge-success" id="refStatus">Conforme</span>
+            </div>
+          </div>
+
+          <div class="card" style="padding:16px;">
+            <div style="font-weight:500;margin-bottom:12px;">Commande rattachée</div>
+            <div style="font-size:13.5px;line-height:1.7;" id="orderDetails">—</div>
+          </div>
+
+          <div class="card" style="padding:16px;">
+            <div style="font-weight:500;margin-bottom:12px;">Décision</div>
+            <button id="btnValidate" class="btn btn-primary" style="width:100%;height:40px;justify-content:center;margin-bottom:8px;">
+              Valider le paiement
+            </button>
+            <button id="btnReject" class="btn" style="width:100%;height:40px;justify-content:center;color:var(--critical);">
+              Rejeter le justificatif
+            </button>
+            <div id="rejectBox" class="hidden" style="margin-top:12px;">
+              <textarea id="rejectReason" class="input" style="height:72px;padding:8px;" placeholder="Motif du rejet (visible par le client)..."></textarea>
+              <button id="btnConfirmReject" class="btn" style="width:100%;margin-top:8px;background:var(--critical);color:white;border:none;">Confirmer le rejet</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    requireAuth();
+
+    function loadOrder() {
+      const params = new URLSearchParams(window.location.search);
+      const orderId = params.get('id') || 'CMD-8941';
+      const store = getCurrentStore();
+      document.getElementById('storeName').textContent = STORES[store].name;
+      const orders = getOrders(store);
+      const order = orders.find(o => o.id === orderId) || orders[0];
+      if (!order) return;
+
+      window.currentOrder = order;
+      window.currentStore = store;
+
+      document.getElementById('orderSubtitle').textContent = `#${order.id} · ${order.total.toFixed(2).replace('.', ',')} €`;
+      document.getElementById('receiptAmount').textContent = order.total.toFixed(2).replace('.', ',') + ' €';
+      document.getElementById('expectedAmount').textContent = order.total.toFixed(2).replace('.', ',') + ' €';
+      document.getElementById('receivedAmount').textContent = order.total.toFixed(2).replace('.', ',') + ' €';
+      document.getElementById('receiptRef').textContent = order.id;
+      document.getElementById('receiptEmitter').textContent = order.client.toUpperCase();
+      document.getElementById('receiptDate').textContent = order.date;
+      document.getElementById('orderDetails').innerHTML = `
+        <div><strong>${order.client}</strong></div>
+        <div class="text-secondary">${order.contact}</div>
+        <div style="margin-top:8px;">${order.items}</div>
+        <div class="text-secondary" style="margin-top:4px;">${order.date}</div>
+      `;
+    }
+
+    document.getElementById('btnValidate').onclick = function() {
+      if (window.currentOrder) {
+        updateOrderStatus(window.currentStore, window.currentOrder.id, 'approved', 'verified');
+        this.textContent = 'Paiement validé ✓';
+        this.disabled = true;
+        setTimeout(() => location.href = 'orders.html?filter=approved', 900);
+      }
+    };
+
+    document.getElementById('btnReject').onclick = function() {
+      document.getElementById('rejectBox').classList.remove('hidden');
+    };
+
+    document.getElementById('btnConfirmReject').onclick = function() {
+      const reason = document.getElementById('rejectReason').value.trim();
+      if (!reason) return alert('Indiquez un motif');
+      if (window.currentOrder) {
+        updateOrderStatus(window.currentStore, window.currentOrder.id, 'pending', 'rejected');
+        location.href = 'orders.html?filter=pending';
+      }
+    };
+
+    loadOrder();
+  </script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>Connexion · Commerce Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="premium.css" />
+  <style>
+    body { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+    .login-card { width: 380px; padding: 40px; }
+    .login-logo { width: 40px; height: 40px; background: #1a1a1a; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; margin: 0 auto 16px; }
+  </style>
+</head>
+<body>
+  <div class="card login-card">
+    <div class="login-logo">C</div>
+    <h1 style="text-align:center;font-size:20px;font-weight:600;margin:0 0 4px;">Commerce Admin</h1>
+    <p style="text-align:center;color:var(--text-secondary);font-size:13px;margin:0 0 28px;">Back-office</p>
+    <form id="loginForm">
+      <div class="mb-4">
+        <label>Identifiant</label>
+        <input id="username" class="input" value="admin" />
+      </div>
+      <div class="mb-4">
+        <label>Mot de passe</label>
+        <input id="password" type="password" class="input" value="admin" />
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;height:36px;justify-content:center;">Se connecter</button>
+    </form>
+    <p style="text-align:center;font-size:12px;color:var(--text-tertiary);margin-top:20px;">admin / admin</p>
+  </div>
+  <script src="app.js"></script>
+  <script>
+    if (isAuthenticated()) location.href = 'products.html';
+    document.getElementById('loginForm').onsubmit = function(e) {
+      e.preventDefault();
+      if (login(document.getElementById('username').value, document.getElementById('password').value)) {
+        location.href = 'products.html';
+      } else alert('Identifiants incorrects');
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>Marques · Commerce Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <link rel="stylesheet" href="premium.css" />
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">C</div>
+      <div><div class="sidebar-title">Commerce</div><div class="sidebar-subtitle">Admin</div></div>
+    </div>
+    <nav class="nav">
+      <div class="nav-section">
+        <div class="nav-label">Produits</div>
+        <a href="products.html" class="nav-item"><span class="material-symbols-outlined icon">inventory_2</span> Liste des produits</a>
+        <a href="add-product.html" class="nav-item"><span class="material-symbols-outlined icon">add_circle</span> Ajouter un produit</a>
+        <a href="categories.html" class="nav-item"><span class="material-symbols-outlined icon">category</span> Catégories</a>
+        <a href="brands.html" class="nav-item active"><span class="material-symbols-outlined icon">verified</span> Marques</a>
+      </div>
+    </nav>
+  </aside>
+  <div class="main">
+    <header class="header">
+      <div id="storeName" style="font-weight:500;">Marketplace</div>
+      <button class="btn" onclick="logout()">Déconnexion</button>
+    </header>
+    <div class="content">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Marques</h1>
+          <div class="page-subtitle">Marques présentes au catalogue</div>
+        </div>
+        <button class="btn btn-primary" onclick="addBrand()">Nouvelle marque</button>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;" id="grid"></div>
+    </div>
+  </div>
+  <script src="app.js"></script>
+  <script>
+    requireAuth();
+    function render() {
+      const store = getCurrentStore();
+      document.getElementById('storeName').textContent = STORES[store].name;
+      const products = getProducts(store);
+      document.getElementById('grid').innerHTML = BRANDS[store].map(b => {
+        const count = products.filter(p => p.brand === b).length;
+        return `<div class="card" style="padding:16px;"><div style="font-weight:500;">${b}</div><div class="text-secondary" style="font-size:13px;margin-top:4px;">${count} produit(s)</div></div>`;
+      }).join('');
+    }
+    function addBrand() {
+      const name = prompt('Nom de la marque :');
+      if (name && !BRANDS[getCurrentStore()].includes(name)) {
+        BRANDS[getCurrentStore()].push(name);
+        render();
+      }
+    }
+    render();
+  </script>
+</body>
+</html>
