@@ -18,26 +18,20 @@
     <p style="text-align:center;color:var(--text-secondary);font-size:13px;margin:0 0 28px;">Back-office</p>
     <form id="loginForm">
       <div class="mb-4">
-        <label>Identifiant</label>
-        <input id="username" class="input" value="admin" />
+        <label>Email</label>
+        <input id="email" class="input" type="email" value="admin@example.com" required />
       </div>
       <div class="mb-4">
         <label>Mot de passe</label>
-        <input id="password" type="password" class="input" value="admin" />
+        <input id="password" type="password" class="input" value="change-me-on-first-login" required />
       </div>
       <button type="submit" class="btn btn-primary" style="width:100%;height:36px;justify-content:center;">Se connecter</button>
     </form>
-    <p style="text-align:center;font-size:12px;color:var(--text-tertiary);margin-top:20px;">admin / admin</p>
+    <p id="error" style="text-align:center;font-size:12px;color:#c00;margin-top:12px;display:none;"></p>
+    <p style="text-align:center;font-size:12px;color:var(--text-tertiary);margin-top:20px;">admin@example.com / change-me-on-first-login</p>
   </div>
-  <script src="app.js"></script>
-  <script>
-    if (isAuthenticated()) location.href = 'products.html';
-    document.getElementById('loginForm').onsubmit = function(e) {
-      e.preventDefault();
-      if (login(document.getElementById('username').value, document.getElementById('password').value)) {
-        location.href = 'products.html';
-      } else alert('Identifiants incorrects');
-    };
-  </script>
+  <script src="scripts/api.js"></script>
+  <script src="scripts/login.js"></script>
 </body>
 </html>
+

@@ -21,44 +21,68 @@
         <a href="categories.html" class="nav-item"><span class="material-symbols-outlined icon">category</span> Catégories</a>
         <a href="brands.html" class="nav-item active"><span class="material-symbols-outlined icon">verified</span> Marques</a>
       </div>
+      <div class="nav-section">
+        <div class="nav-label">Commandes</div>
+        <a href="orders.html" class="nav-item"><span class="material-symbols-outlined icon">receipt_long</span> Commandes</a>
+        <a href="verification.html" class="nav-item"><span class="material-symbols-outlined icon">credit_score</span> Vérification paiements</a>
+      </div>
     </nav>
   </aside>
   <div class="main">
     <header class="header">
       <div id="storeName" style="font-weight:500;">Marketplace</div>
-      <button class="btn" onclick="logout()">Déconnexion</button>
+      <button class="btn" onclick="AdminAPI.logout()">Déconnexion</button>
     </header>
-    <div class="content">
+    <div class="content content-center">
       <div class="page-header">
         <div>
           <h1 class="page-title">Marques</h1>
-          <div class="page-subtitle">Marques présentes au catalogue</div>
+          <div class="page-subtitle" id="count">0 marques</div>
         </div>
-        <button class="btn btn-primary" onclick="addBrand()">Nouvelle marque</button>
+        <button class="btn btn-primary" onclick="openForm()">Nouvelle marque</button>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;" id="grid"></div>
+
+      <div class="card" id="formCard" style="display:none;padding:20px;margin-bottom:16px;">
+        <form id="brandForm">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;" class="mb-4">
+            <div>
+              <label>Nom</label>
+              <input name="name" id="brandName" class="input" required />
+            </div>
+            <div>
+              <label>Slug</label>
+              <input name="slug" id="brandSlug" class="input" required />
+            </div>
+          </div>
+          <label style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+            <input type="checkbox" name="is_active" checked /> Active
+          </label>
+          <div class="flex gap-2">
+            <button type="button" class="btn" onclick="closeForm()">Annuler</button>
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+          </div>
+          <p id="formError" style="color:#c00;margin-top:8px;display:none;"></p>
+        </form>
+      </div>
+
+      <div class="card">
+        <table>
+          <thead>
+            <tr>
+              <th>Nom</th>
+              <th>Slug</th>
+              <th>Statut</th>
+              <th style="width:100px;"></th>
+            </tr>
+          </thead>
+          <tbody id="list"></tbody>
+        </table>
+      </div>
     </div>
   </div>
-  <script src="app.js"></script>
-  <script>
-    requireAuth();
-    function render() {
-      const store = getCurrentStore();
-      document.getElementById('storeName').textContent = STORES[store].name;
-      const products = getProducts(store);
-      document.getElementById('grid').innerHTML = BRANDS[store].map(b => {
-        const count = products.filter(p => p.brand === b).length;
-        return `<div class="card" style="padding:16px;"><div style="font-weight:500;">${b}</div><div class="text-secondary" style="font-size:13px;margin-top:4px;">${count} produit(s)</div></div>`;
-      }).join('');
-    }
-    function addBrand() {
-      const name = prompt('Nom de la marque :');
-      if (name && !BRANDS[getCurrentStore()].includes(name)) {
-        BRANDS[getCurrentStore()].push(name);
-        render();
-      }
-    }
-    render();
-  </script>
+  <script src="scripts/api.js"></script>
+  <script src="scripts/app.js"></script>
+  <script src="scripts/brands.js"></script>
 </body>
 </html>
+

@@ -92,9 +92,10 @@
       <div class="card">
         <div class="tabs" id="tabs">
           <button class="tab active" data-filter="all">Toutes</button>
-          <button class="tab" data-filter="pending">En attente</button>
+          <button class="tab" data-filter="pending_payment">Paiement en attente</button>
+          <button class="tab" data-filter="payment_review">En vérification</button>
           <button class="tab" data-filter="approved">Approuvées</button>
-          <button class="tab" data-filter="preparing">En préparation</button>
+          <button class="tab" data-filter="in_preparation">En préparation</button>
           <button class="tab" data-filter="shipped">Expédiées</button>
           <button class="tab" data-filter="delivered">Livrées</button>
         </div>
@@ -120,85 +121,9 @@
     </div>
   </div>
 
-  <script src="app.js"></script>
-  <script>
-    requireAuth();
-
-    const statusLabels = {
-      pending: 'En attente',
-      approved: 'Approuvée',
-      preparing: 'En préparation',
-      shipped: 'Expédiée',
-      delivered: 'Livrée'
-    };
-    const paymentBadge = {
-      pending: 'badge-warning',
-      verified: 'badge-success',
-      rejected: 'badge-critical'
-    };
-    const paymentText = {
-      pending: 'À vérifier',
-      verified: 'Vérifié',
-      rejected: 'Rejeté'
-    };
-
-    function toggleDropdown() {
-      document.getElementById('storeDropdown').classList.toggle('open');
-    }
-    function switchStore(store) {
-      setCurrentStore(store);
-    }
-
-    function renderOrders(filter = 'all') {
-      const store = getCurrentStore();
-      document.getElementById('storeName').textContent = STORES[store].name;
-      let orders = getOrders(store);
-      const all = [...orders];
-      if (filter !== 'all') {
-        orders = orders.filter(o => o.status === filter || (filter === 'pending' && o.payment === 'pending'));
-      }
-
-      document.getElementById('totalOrders').textContent = all.length;
-      document.getElementById('pendingOrders').textContent = all.filter(o => o.payment === 'pending').length;
-      document.getElementById('shippingOrders').textContent = all.filter(o => o.status === 'shipped').length;
-
-      document.getElementById('ordersTableBody').innerHTML = orders.map(o => `
-        <tr>
-          <td><input type="checkbox" /></td>
-          <td><a href="verification.html?id=${o.id}" style="color:#1a1a1a;font-weight:500;text-decoration:none;">#${o.id}</a></td>
-          <td class="text-secondary">${o.date}</td>
-          <td>
-            <div style="font-weight:500;">${o.client}</div>
-            <div class="text-secondary" style="font-size:12px;">${o.contact}</div>
-          </td>
-          <td>${o.items}</td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums;font-weight:500;">${o.total.toFixed(2).replace('.', ',')} €</td>
-          <td><span class="badge ${paymentBadge[o.payment] || 'badge-neutral'}">${paymentText[o.payment] || o.payment}</span></td>
-          <td><span class="badge badge-neutral">${statusLabels[o.status] || o.status}</span></td>
-          <td style="text-align:right;"><a href="verification.html?id=${o.id}" class="btn" style="height:28px;">Détail</a></td>
-        </tr>
-      `).join('');
-    }
-
-    document.querySelectorAll('.tab').forEach(tab => {
-      tab.addEventListener('click', function() {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        this.classList.add('active');
-        renderOrders(this.dataset.filter);
-      });
-    });
-
-    document.addEventListener('click', e => {
-      if (!e.target.closest('#storeDropdown')) document.getElementById('storeDropdown').classList.remove('open');
-    });
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const initialFilter = urlParams.get('filter') || 'all';
-    document.querySelectorAll('.tab').forEach(t => {
-      if (t.dataset.filter === initialFilter) t.classList.add('active');
-      else t.classList.remove('active');
-    });
-    renderOrders(initialFilter);
-  </script>
+  <script src="scripts/api.js"></script>
+  <script src="scripts/app.js"></script>
+  <script src="scripts/orders.js"></script>
 </body>
 </html>
+

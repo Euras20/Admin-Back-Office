@@ -291,3 +291,14 @@ label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 6px; c
 .font-medium { font-weight: 500; }
 .font-semibold { font-weight: 600; }
 .hidden { display: none; }
+
+
+/* Centered form pages */
+.content-center {
+  max-width: none;
+  width: 100%;
+  padding: 28px 32px 80px;
+}
+.content-center .card {
+  max-width: 1100px;
+}

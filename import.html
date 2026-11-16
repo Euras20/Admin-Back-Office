@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>Import produits · Commerce Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <link rel="stylesheet" href="premium.css" />
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">C</div>
+      <div><div class="sidebar-title">Commerce</div><div class="sidebar-subtitle">Admin</div></div>
+    </div>
+    <nav class="nav">
+      <div class="nav-section">
+        <div class="nav-label">Produits</div>
+        <a href="products.html" class="nav-item"><span class="material-symbols-outlined icon">inventory_2</span> Liste des produits</a>
+        <a href="add-product.html" class="nav-item"><span class="material-symbols-outlined icon">add_circle</span> Ajouter un produit</a>
+        <a href="import.html" class="nav-item active"><span class="material-symbols-outlined icon">upload_file</span> Importer</a>
+        <a href="categories.html" class="nav-item"><span class="material-symbols-outlined icon">category</span> Catégories</a>
+        <a href="brands.html" class="nav-item"><span class="material-symbols-outlined icon">verified</span> Marques</a>
+      </div>
+    </nav>
+  </aside>
+  <div class="main">
+    <header class="header">
+      <div id="storeName" style="font-weight:500;">Marketplace</div>
+      <button class="btn" onclick="AdminAPI.logout()">Déconnexion</button>
+    </header>
+    <div class="content content-center">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Importer des produits</h1>
+          <div class="page-subtitle">Téléchargez le modèle, remplissez-le, puis importez.</div>
+        </div>
+      </div>
+
+      <div class="card" style="padding:20px;margin-bottom:16px;">
+        <div style="font-weight:600;margin-bottom:12px;">1. Télécharger le modèle</div>
+        <button class="btn" onclick="downloadTemplate()">Télécharger le CSV modèle</button>
+      </div>
+
+      <div class="card" style="padding:20px;margin-bottom:16px;">
+        <div style="font-weight:600;margin-bottom:12px;">2. Importer un fichier</div>
+        <form id="importForm">
+          <div class="mb-4">
+            <label>Fichier CSV / XLSX</label>
+            <input type="file" name="data_file" accept=".csv,.txt,.xlsx" class="input" required />
+          </div>
+          <div class="mb-4">
+            <label>Archive images (ZIP, optionnel)</label>
+            <input type="file" name="image_archive" accept=".zip" class="input" />
+          </div>
+          <button type="submit" class="btn btn-primary">Lancer l'import</button>
+        </form>
+        <p id="msg" style="margin-top:12px;font-size:13px;display:none;"></p>
+      </div>
+
+      <div class="card" id="jobCard" style="display:none;padding:20px;">
+        <div style="font-weight:600;margin-bottom:12px;">3. Statut</div>
+        <div id="jobInfo" style="font-size:13.5px;line-height:1.7;"></div>
+        <button class="btn btn-primary" id="btnConfirm" style="margin-top:12px;display:none;">Confirmer l'import</button>
+      </div>
+    </div>
+  </div>
+  <script src="scripts/api.js"></script>
+  <script src="scripts/app.js"></script>
+  <script src="scripts/import.js"></script>
+</body>
+</html>
+

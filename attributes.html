@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>Caractéristiques · Commerce Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <link rel="stylesheet" href="premium.css" />
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">C</div>
+      <div><div class="sidebar-title">Commerce</div><div class="sidebar-subtitle">Admin</div></div>
+    </div>
+    <nav class="nav">
+      <div class="nav-section">
+        <div class="nav-label">Produits</div>
+        <a href="products.html" class="nav-item"><span class="material-symbols-outlined icon">inventory_2</span> Liste des produits</a>
+        <a href="add-product.html" class="nav-item"><span class="material-symbols-outlined icon">add_circle</span> Ajouter un produit</a>
+        <a href="attributes.html" class="nav-item active"><span class="material-symbols-outlined icon">tune</span> Caractéristiques</a>
+        <a href="categories.html" class="nav-item"><span class="material-symbols-outlined icon">category</span> Catégories</a>
+        <a href="brands.html" class="nav-item"><span class="material-symbols-outlined icon">verified</span> Marques</a>
+      </div>
+    </nav>
+  </aside>
+  <div class="main">
+    <header class="header">
+      <div id="storeName" style="font-weight:500;">Marketplace</div>
+      <button class="btn" onclick="AdminAPI.logout()">Déconnexion</button>
+    </header>
+    <div class="content" style="padding:28px 32px 80px;">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Caractéristiques</h1>
+          <div class="page-subtitle">Définissez les specs qui apparaissent sur la fiche produit</div>
+        </div>
+        <button class="btn btn-primary" onclick="openForm()">Nouvelle caractéristique</button>
+      </div>
+
+      <div class="card" id="formCard" style="display:none;padding:20px;margin-bottom:16px;max-width:640px;">
+        <form id="attrForm">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;" class="mb-4">
+            <div>
+              <label>Code</label>
+              <input name="code" id="attrCode" class="input" required placeholder="puissance" />
+            </div>
+            <div>
+              <label>Libellé</label>
+              <input name="label" id="attrLabel" class="input" required placeholder="Puissance" />
+            </div>
+          </div>
+          <div class="mb-4">
+            <label>Type</label>
+            <select name="data_type" class="input">
+              <option value="text">Texte</option>
+              <option value="integer">Nombre entier</option>
+              <option value="decimal">Décimal</option>
+              <option value="boolean">Oui/Non</option>
+            </select>
+          </div>
+          <label style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+            <input type="checkbox" name="is_filterable" /> Filtrable en boutique
+          </label>
+          <div class="flex gap-2">
+            <button type="button" class="btn" onclick="closeForm()">Annuler</button>
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+          </div>
+          <p id="formError" style="color:#c00;margin-top:8px;display:none;"></p>
+        </form>
+      </div>
+
+      <div class="card" style="max-width:880px;">
+        <table>
+          <thead>
+            <tr><th>Libellé</th><th>Code</th><th>Type</th><th>Filtrable</th></tr>
+          </thead>
+          <tbody id="list"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <script src="scripts/api.js"></script>
+  <script src="scripts/app.js"></script>
+  <script src="scripts/attributes.js"></script>
+</body>
+</html>
+
